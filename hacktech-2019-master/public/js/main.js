@@ -48,7 +48,9 @@ $(document).ready(function() {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    gdpValues[d - 4] = currentGDP;
+                    if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
+                        gdpValues[d - 4] = currentGDP;
+                    }
                 }
 
 
@@ -64,7 +66,9 @@ $(document).ready(function() {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    inflationValues[d - 4] = currentGDP;
+                    if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
+                        inflationValues[d - 4] = currentGDP;
+                    }
                 }
 
 
@@ -80,7 +84,9 @@ $(document).ready(function() {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    debtValues[d - 4] = currentGDP;
+                    if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
+                        debtValues[d - 4] = currentGDP;
+                    }
                 }
 
                 for (var i = 0; i < json.length; i++) {
