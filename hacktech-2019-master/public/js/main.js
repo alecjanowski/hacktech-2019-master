@@ -6,6 +6,7 @@ $(document).ready(function() {
         var debtValues = [];
         var inflationValues = [];
         var unemploymentValues = [];
+        var gdpCurrent;
 
         var startTimes = {};
         for (var i = 0; i < json.length; i++) {
@@ -44,15 +45,15 @@ $(document).ready(function() {
 
                 var dates = response.dataset_data.data;
                 gdpValues[0] = dates[4][1];
+                gdpCurrent = gdpValues[0];
                 for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
                     if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
-                        gdpValues[d - 4] = currentGDP;
+                        gdpValues[d - 4] = (currentGDP - gdpValues[d - 5]) / gdpValues[d - 5];
                     }
                 }
-
 
 
 
