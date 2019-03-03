@@ -7,6 +7,11 @@ $(document).ready(function() {
         var inflationValues = [];
         var unemploymentValues = [];
 
+        var startTimes = {};
+        for (var i = 0; i < json.length; i++) {
+            startTimes[json[i].iso.value] = json[i].start_time.value;
+        }
+
         for (var i = 0; i < json.length; i++) {
             countryOptions[json[i].countryLabel.value] = json[i].iso.value;
         }
@@ -17,13 +22,20 @@ $(document).ready(function() {
         $("select").html(countryOptionsHTML);
         $("select").change(function() {
             var countryCode = $(this).val();
+            var start = startTimes[countryCode];
             $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_LUR/data.json", function(response) {
 
 
                 var dates = response.dataset_data.data;
+                unemploymentValues[0] = dates[4][1];
                 for (var d = 0; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
+
+                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
+                        unemploymentValues[1] = currentGDP;
+                        break;
+                    }
                 }
 
 
@@ -34,9 +46,15 @@ $(document).ready(function() {
 
 
                 var dates = response.dataset_data.data;
+                gdpValues[0] = dates[4][1];
                 for (var d = 0; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
+
+                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
+                        gdpValues[1] = currentGDP;
+                        break;
+                    }
                 }
 
 
@@ -47,9 +65,15 @@ $(document).ready(function() {
 
 
                 var dates = response.dataset_data.data;
+                inflationValues[0] = dates[4][1];
                 for (var d = 0; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
+
+                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
+                        inflationValues[1] = currentGDP;
+                        break;
+                    }
                 }
 
 
@@ -60,9 +84,15 @@ $(document).ready(function() {
 
 
                 var dates = response.dataset_data.data;
+                debtValues[0] = dates[4][1];
                 for (var d = 0; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
+
+                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
+                        debtValues[1] = currentGDP;
+                        break;
+                    }
                 }
 
                 for (var i = 0; i < json.length; i++) {
