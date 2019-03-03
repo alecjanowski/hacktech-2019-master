@@ -28,14 +28,11 @@ $(document).ready(function() {
 
                 var dates = response.dataset_data.data;
                 unemploymentValues[0] = dates[4][1];
-                for (var d = 0; d < dates.length; d++) {
+                for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
-                        unemploymentValues[1] = currentGDP;
-                        break;
-                    }
+                    unemploymentValues[d - 4] = currentGDP;
                 }
 
 
@@ -47,14 +44,11 @@ $(document).ready(function() {
 
                 var dates = response.dataset_data.data;
                 gdpValues[0] = dates[4][1];
-                for (var d = 0; d < dates.length; d++) {
+                for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
-                        gdpValues[1] = currentGDP;
-                        break;
-                    }
+                    gdpValues[d - 4] = currentGDP;
                 }
 
 
@@ -66,14 +60,11 @@ $(document).ready(function() {
 
                 var dates = response.dataset_data.data;
                 inflationValues[0] = dates[4][1];
-                for (var d = 0; d < dates.length; d++) {
+                for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
-                        inflationValues[1] = currentGDP;
-                        break;
-                    }
+                    inflationValues[d - 4] = currentGDP;
                 }
 
 
@@ -85,14 +76,11 @@ $(document).ready(function() {
 
                 var dates = response.dataset_data.data;
                 debtValues[0] = dates[4][1];
-                for (var d = 0; d < dates.length; d++) {
+                for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    if(currentDate.substr(0, 4) < start.substr(0, 4)) {
-                        debtValues[1] = currentGDP;
-                        break;
-                    }
+                    debtValues[d - 4] = currentGDP;
                 }
 
                 for (var i = 0; i < json.length; i++) {
