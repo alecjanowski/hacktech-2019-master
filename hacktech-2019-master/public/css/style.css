@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue";
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.results {
+    margin-top: 50px;
+}
+
+.banda {
+    width: 200px;
+}
