@@ -24,7 +24,7 @@ $(document).ready(function() {
         $("select").change(function() {
             var countryCode = $(this).val();
             var start = startTimes[countryCode];
-            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_LUR/data.json", function(response) {
+            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_LUR/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
 
 
                 var dates = response.dataset_data.data;
@@ -40,25 +40,30 @@ $(document).ready(function() {
 
 
             });
-            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_PPPGDP/data.json", function(response) {
+            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_PPPGDP/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
 
 
                 var dates = response.dataset_data.data;
-                gdpValues[0] = dates[4][1];
+                var gdpRawValues = [];
+                gdpValues[0] = 0;
                 gdpCurrent = gdpValues[0];
+                gdpRawValues[0] = dates[4][1];
                 for (var d = 5; d < dates.length; d++) {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
                     if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
-                        gdpValues[d - 4] = (currentGDP - gdpValues[d - 5]) / gdpValues[d - 5];
+                        gdpRawValues[d - 4] = currentGDP;
+                        console.log(currentGDP);
+                        gdpValues[d - 4] = (gdpRawValues[d - 5] - gdpRawValues[d - 4]) / gdpRawValues[d - 5];
                     }
                 }
 
+                console.log(gdpValues);
 
 
             });
-            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_NGDP_D/data.json", function(response) {
+            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_NGDP_D/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
 
 
                 var dates = response.dataset_data.data;
@@ -76,7 +81,7 @@ $(document).ready(function() {
 
 
             });
-            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_GGXWDG_NGDP/data.json", function(response) {
+            $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_GGXWDG_NGDP/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
 
 
                 var dates = response.dataset_data.data;
