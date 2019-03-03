@@ -17,28 +17,33 @@ $(document).ready(function() {
         return STDEV;
     }
     function math(gdpValues, inflationValues, unemploymentValues, debtValues, gdpCurrent) {
+        console.log("RAW GDP: " + gdpValues);
+        console.log("RAW INFLATION: " + inflationValues);
+        console.log("RAW UNEM: " + unemploymentValues);
+        console.log("RAW DEBT: " + debtValues);
+
         var stdev_gdpchange = stddev(gdpValues);
-        console.log("Standard Dev GDP: " + stdev_gdpchange);
+        console.log("Standard Dev GDPChange: " + stdev_gdpchange);
         var stdev_inflation = stddev(inflationValues);
-        console.log("Standard Dev GDP: " + stdev_inflation);
+        console.log("Standard Dev Inflation: " + stdev_inflation);
 
         var stdev_unemployment = stddev(unemploymentValues);
-        console.log("Standard Dev GDP: " + stdev_unemployment);
+        console.log("Standard Dev Unemployment: " + stdev_unemployment);
 
         var stdev_defgdp = stddev(debtValues);
-        console.log("Standard Dev GDP: " + stdev_defgdp);
+        console.log("Standard Dev DefGDP: " + stdev_defgdp);
 
 
         var infRate = inflationValues[0];
-        console.log("INFLATTTTTTTTTTTTTION: " + infRate);
+        console.log("Current Inflation: " + infRate);
         var unmRate = unemploymentValues[0];
-        console.log("NEXXXXXXXXXXXXTTTTTTTT: " + unmRate);
+        console.log("Current UNM Rate: " + unmRate);
 
         var gdpRate = gdpValues[0];
-        console.log("NEXTTTTTTTTTTTTTT: " + gdpRate);
+        console.log("Current GDP Rate: " + gdpRate);
 
-        var deficit = debtValues[0];
-        console.log("NEXTNEXT: " + deficit);
+        var deficit = debtValues[0] / 100;
+        console.log("Current Debt: " + deficit);
 
 
         var avgstdev = (stdev_gdpchange + stdev_inflation + stdev_unemployment + stdev_defgdp)/4.0;
@@ -47,22 +52,22 @@ $(document).ready(function() {
 
         //Part 1 calculates weights for each factor
 
-        var wgdp= avgstdev/stdev_gdpchange;
+        var wgdp= avgstdev / stdev_gdpchange;
         console.log("Standard Dev WGDP: " + wgdp);
 
-        var winf= avgstdev/stdev_inflation;
+        var winf= avgstdev / stdev_inflation;
         console.log("Standard Dev WINF: " + winf);
 
-        var wunm= avgstdev/stdev_unemployment;
+        var wunm= avgstdev / stdev_unemployment;
         console.log("Standard Dev WUNM: " + wunm);
 
-        var wdef= avgstdev/stdev_defgdp;
+        var wdef= avgstdev / stdev_defgdp;
         console.log("Standard Dev WDEF: " + wdef);
 
 
         //Part 2 calculates the Weighted EPI for the country
 
-        const wEPI = (100.0 - (winf*(infRate)) - (wunm*(unmRate - 4.75)) - (wdef*((deficit/gdpCurrent)*100.0)) + (wgdp*(gdpRate - 4.75)));
+        const wEPI = 100.0 - (Math.abs(2 - infRate) * 3) - (Math.abs(2 - unmRate) ) * 2 - (-deficit) + ((gdpRate - 4.75) * 2);
         console.log(winf + "%%%%%%%%" + infRate + "%%%%%%%%%%" + wunm + "%%%%%%%%%" + unmRate + "%%%%%%%%%%%" + wdef + "%%%%%%%" + deficit + "%%%%%%%%" + gdpCurrent + "%%%%%%%%%%%%%%" + wgdp + "%%%%%" + gdpRate);
         console.log(wEPI);
 
@@ -143,8 +148,9 @@ $(document).ready(function() {
                     var currentDate = dates[d][0];
                     var currentGDP = dates[d][1];
 
-                    unemploymentValues[d - 4] = currentGDP;
-                }
+                    if(currentDate.substr(0, 4) >= startTimes[countryCode].substr(0, 4) - 1) {
+                        unemploymentValues[d - 4] = currentGDP;
+                    }                }
 
 
                 $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_PPPGDP/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
@@ -165,7 +171,7 @@ $(document).ready(function() {
                     }
 
                     for (var i = 0; i < gdpRawValues.length - 1; i++) {
-                        gdpTemp[i] = (gdpRawValues[i] - gdpRawValues[i + 1]) / gdpRawValues[i + 1]
+                        gdpTemp[i] = ((gdpRawValues[i] - gdpRawValues[i + 1]) / gdpRawValues[i + 1]) * 100;
                     }
                     gdpTemp[gdpRawValues.length - 1] = 0;
                     gdpCurrent = gdpRawValues[0];
@@ -189,7 +195,7 @@ $(document).ready(function() {
                         }
 
 
-                        $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_GGXWDG_NGDP/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
+                        $.get("https://www.quandl.com/api/v3/datasets/ODA/" + countryCode + "_GGSB_NPGDP/data.json?api_key=e7Fsxgoafnmxyr2yXxdu", function(response) {
 
 
                             var dates = response.dataset_data.data;
